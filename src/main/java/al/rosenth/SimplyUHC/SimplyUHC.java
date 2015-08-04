@@ -5,24 +5,32 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Gil on 8/3/2015.
  */
-public class SimplyUHC extends JavaPlugin {
+public class SimplyUHC extends JavaPlugin implements Listener{
     private int x;
     private int z;
     private boolean isSet = false;
+    private final PotionEffectType[] effects = { PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.INVISIBILITY, PotionEffectType.BLINDNESS };
     private static SimplyUHC instance;
     public static SimplyUHC getInstance(){
         return instance;
@@ -52,43 +60,25 @@ public class SimplyUHC extends JavaPlugin {
             if(isSet) {
                 Random random = new Random();
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    int playerX = random.nextInt(x);
-                    int playerZ = random.nextInt(z);
-                    Location location = new Location(p.getWorld() , playerX, p.getWorld().getHighestBlockAt(playerX, playerZ).getY() ,playerZ);
-                    p.teleport(location);
-                    if(p.getLocation().getBlock().getType()!= org.bukkit.Material.AIR){
-                        playerX = random.nextInt(x);
-                        playerZ = random.nextInt(z);
-                        location = new Location(p.getWorld() , playerX, p.getWorld().getHighestBlockAt(playerX, playerZ).getY() ,playerZ);
-                        p.teleport(location);
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 100));
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 10, 100));
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 100));
-                    }
+                    teleportPlayer(p);
                 }
                 for(Player p:  Bukkit.getServer().getOnlinePlayers()){
                     p.sendMessage("All players are now teleported. We will now heal you and feed you one last time");
                     p.setHealth(20);
                     p.setFoodLevel(20);
                     p.sendMessage("You should now be healed and fed. Good Luck!");
-                }
-                for(Player p:  Bukkit.getServer().getOnlinePlayers()){
-                   p.sendMessage("Starting in...");
-                    for(int i =5;i>0;i--){
-                        p.sendMessage("..." + i);
+                    freezePlayer(p, 1000);
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, -127));
 
-                        try {
-                            Thread.sleep(1000);
-                        }
-                        catch(Exception e){
-                            e.printStackTrace();
-                            throw new RuntimeException(e);
-                        }
-                        }
-                    for (PotionEffect effect : p.getActivePotionEffects()) {
-                        p.removePotionEffect(effect.getType());
-                    }
-                    p.sendMessage("Started!");
+                }
+                for(Player p:  Bukkit.getServer().getOnlinePlayers()) {
+                    p.sendMessage("Starting in 5 Seconds");
+                    BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+                    TimerTask task = new TimerTask();
+                    task.collec = Bukkit.getServer().getOnlinePlayers();
+
+                    scheduler.scheduleSyncDelayedTask(this, task, 50);
+
                 }
                 return true;
             }
@@ -122,5 +112,39 @@ public class SimplyUHC extends JavaPlugin {
             return true;
         }
         return false;
+    }
+    private void freezePlayer(Player player, int ticks) {
+        ArrayList<PotionEffect> potions = new ArrayList<PotionEffect>();
+        for (PotionEffectType type : effects)
+            potions.add(new PotionEffect(type, ticks, Byte.MAX_VALUE));
+        player.addPotionEffects(potions);
+    }
+    private boolean safeSpawn(Player player){
+        Block currentblock = player.getLocation().getBlock();
+        if(currentblock.getBiome()!= Biome.OCEAN&&currentblock.getBiome()!=Biome.DEEP_OCEAN&&currentblock.getBiome()!=Biome.FROZEN_OCEAN&&currentblock.getType()== org.bukkit.Material.AIR){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    private void teleportPlayer(Player p){
+        Random random = new Random();
+        int playerX = random.nextInt(x) - x;
+        int playerZ = random.nextInt(z) - z;
+        Location location = new Location(p.getWorld() , playerX, p.getWorld().getHighestBlockAt(playerX, playerZ).getY() ,playerZ);
+        p.teleport(location);
+        if(safeSpawn(p)){
+            p.sendMessage("You are at your spawn. Game will start in 5 seconds");
+            return;
+        }
+        else{
+            teleportPlayer(p);
+        }
+    }
+    @EventHandler
+    public void onPlayerRegainHealth(EntityRegainHealthEvent event) {
+        if(event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED || event.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN)
+            event.setCancelled(true);
     }
 }
