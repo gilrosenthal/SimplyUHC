@@ -1,0 +1,7 @@
+name: DogeUHC
+main: al.rosenth.DogeUHC
+version: ${version}
+commands:
+  start:
+      description: Turns natural regen off
+      usage: /start
