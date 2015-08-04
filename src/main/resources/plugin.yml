@@ -1,7 +1,10 @@
-name: DogeUHC
-main: al.rosenth.DogeUHC
-version: ${version}
+name: SimplyUHC
+main: al.rosenth.SimplyUHC.SimplyUHC
+version: 0.0.1
 commands:
   start:
       description: Turns natural regen off
       usage: /start
+  setborder:
+      description: Sets the World border
+      usage: /setborder maxX,maxY
