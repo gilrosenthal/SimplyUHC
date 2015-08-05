@@ -19,6 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.command.CommandSender;
+import org.bukkit.GameMode;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,8 +30,8 @@ import java.util.Random;
  * Created by Gil on 8/3/2015.
  */
 public class SimplyUHC extends JavaPlugin implements Listener{
-    private int x;
-    private int z;
+    private int borderX;
+    private int borderZ;
     private boolean isSet = false;
     private final PotionEffectType[] effects = { PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.INVISIBILITY, PotionEffectType.BLINDNESS };
     private static SimplyUHC instance;
@@ -57,11 +60,16 @@ public class SimplyUHC extends JavaPlugin implements Listener{
     @Override
     public boolean onCommand(CommandSender sender,Command cmd,String commandLabel,String[] args){
         if(cmd.getName().equalsIgnoreCase("start")){
+            if(args.length != 2){
+                sender.sendMessage(ChatColor.RED+"Please provide all arguments");
+                return true;
+            }
+            
             if(isSet) {
                 Random random = new Random();
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    teleportPlayer(p);
-                }
+                Player playerSender = (Player) sender;
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "spreadplayers" + " " + playerSender.getLocation().getX() + " " + playerSender.getLocation().getZ() + " " + args[0] + " " + "@a[m=0]");
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "gamerule naturalRegeneration false");
                 for(Player p:  Bukkit.getServer().getOnlinePlayers()){
                     p.sendMessage("All players are now teleported. We will now heal you and feed you one last time");
                     p.setHealth(20);
@@ -88,19 +96,19 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             }
         }
         else if(cmd.getName().equalsIgnoreCase("setborder")){
-            if(args.length<2){
+            if(args.length != 2){
                 sender.sendMessage(ChatColor.RED+"Please provide all arguments");
                 return true;
             }
             for(Player p:  Bukkit.getServer().getOnlinePlayers()){
                 p.sendMessage("Please prepare for a bit of lag, as we are pregenerating the chunks");
             }
-            x = Integer.parseInt(args[0]);
-            z = Integer.parseInt(args[1]);
+            borderX = Integer.parseInt(args[0]);
+            borderZ = Integer.parseInt(args[1]);
             isSet = true;
             World current =Bukkit.getWorlds().iterator().next();
-            int xChunks =(int)Math.ceil(x/16);
-            int zChunks = (int)Math.ceil(z/16);
+            int xChunks =(int)Math.ceil(borderX/16);
+            int zChunks = (int)Math.ceil(borderZ/16);
 
             for(int xx = 0;xx<xChunks;xx++){
                 for(int zz = 0;zz<zChunks;zz++){
@@ -119,32 +127,14 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             potions.add(new PotionEffect(type, ticks, Byte.MAX_VALUE));
         player.addPotionEffects(potions);
     }
-    private boolean safeSpawn(Player player){
-        Block currentblock = player.getLocation().getBlock();
-        if(currentblock.getBiome()!= Biome.OCEAN&&currentblock.getBiome()!=Biome.DEEP_OCEAN&&currentblock.getBiome()!=Biome.FROZEN_OCEAN&&currentblock.getType()== org.bukkit.Material.AIR){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    private void teleportPlayer(Player p){
-        Random random = new Random();
-        int playerX = random.nextInt(x) - x;
-        int playerZ = random.nextInt(z) - z;
-        Location location = new Location(p.getWorld() , playerX, p.getWorld().getHighestBlockAt(playerX, playerZ).getY() ,playerZ);
-        p.teleport(location);
-        if(safeSpawn(p)){
-            p.sendMessage("You are at your spawn. Game will start in 5 seconds");
-            return;
-        }
-        else{
-            teleportPlayer(p);
-        }
-    }
     @EventHandler
     public void onPlayerRegainHealth(EntityRegainHealthEvent event) {
         if(event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED || event.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN)
             event.setCancelled(true);
+    }
+    public void onPlayerDeath(PlayerDeathEvent event)
+    {
+        Player player = event.getEntity();
+        player.setGameMode(GameMode.SPECTATOR);
     }
 }
