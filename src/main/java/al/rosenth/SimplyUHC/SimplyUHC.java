@@ -64,7 +64,7 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             
             if(isSet) {
                 Random random = new Random();
-                playerSender = Player(sender)
+                playerSender = Player(sender);
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "spreadplayers" + playerSender.getLocation().getX() + playerSender.getLocation().getY(), + args[0] + "@a[m=0]");
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "gamerule naturalRegeneration false");
                 for(Player p:  Bukkit.getServer().getOnlinePlayers()){
