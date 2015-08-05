@@ -19,6 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.command.CommandSender;
+import org.bukkit.GameMode;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -64,8 +67,8 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             
             if(isSet) {
                 Random random = new Random();
-                playerSender = Player(sender);
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "spreadplayers" + playerSender.getLocation().getX() + playerSender.getLocation().getY(), + args[0] + "@a[m=0]");
+                Player playerSender = Player(sender);
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "spreadplayers" + " " + playerSender.getLocation().getX() + " " + playerSender.getLocation().getZ() + " " + args[0] + " " + "@a[m=0]");
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "gamerule naturalRegeneration false");
                 for(Player p:  Bukkit.getServer().getOnlinePlayers()){
                     p.sendMessage("All players are now teleported. We will now heal you and feed you one last time");
