@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Created by Gil on 8/4/2015.
  */
-public class TimerTask implements Runnable {
+public class StartTimer implements Runnable {
     Collection<? extends Player> collec;
     int i;
 

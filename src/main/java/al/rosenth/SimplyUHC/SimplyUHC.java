@@ -74,10 +74,10 @@ public class SimplyUHC extends JavaPlugin implements Listener{
                 for(Player p:  Bukkit.getServer().getOnlinePlayers()) {
                     p.sendMessage("Starting in 5 Seconds");
                     BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                    TimerTask task = new TimerTask();
+                    StartTimer task = new StartTimer();
                     task.collec = Bukkit.getServer().getOnlinePlayers();
 
-                    scheduler.scheduleSyncDelayedTask(this, task, 50);
+                    scheduler.scheduleSyncDelayedTask(this, task, 100);
 
                 }
                 return true;
