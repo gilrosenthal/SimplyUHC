@@ -5,4 +5,4 @@ A simple UHC plugin with extensive addability
 <br>
 Still in Alpha
 <br>
-Build downloads can be found at (https://drone.io/github.com/gilrosenthal/SimplyUHC/files)
+Build downloads can be found at https://drone.io/github.com/gilrosenthal/SimplyUHC/files
