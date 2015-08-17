@@ -14,7 +14,8 @@ public class ScenarioManager {
             HalfOres.class,
             BenchBlitz.class,
             ThreeArrows.class,
-            AppleFamine.class
+            AppleFamine.class,
+            Backpacks.class
     };
     public ScenarioManager(String path){
         List<Scenario> loaded = new ArrayList<Scenario>();
