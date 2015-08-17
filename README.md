@@ -1,6 +1,6 @@
 # SimplyUHC
 A simple UHC plugin with extensive addability
 <br>
-[![Build Status](https://travis-ci.org/gilrosenthal/SimplyUHC.svg?branch=master)](https://travis-ci.org/gilrosenthal/SimplyUHC)
+[![Build Status](https://drone.io/github.com/gilrosenthal/SimplyUHC/status.png)](https://drone.io/github.com/gilrosenthal/SimplyUHC/latest)
 <br>
 Still in Alpha
