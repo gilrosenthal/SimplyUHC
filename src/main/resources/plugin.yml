@@ -2,9 +2,9 @@ name: SimplyUHC
 main: al.rosenth.SimplyUHC.SimplyUHC
 version: 0.0.1
 commands:
-  start:
-      description: Turns natural regen off
-      usage: /start
+  uhc:
+      description: Basic commands for uhc
+      usage: /uhc [start,stop]
   setborder:
       description: Sets the World border
       usage: /setborder maxX,maxY

@@ -1,6 +1,7 @@
 package al.rosenth.SimplyUHC;
 
 import al.rosenth.SimplyUHC.listeners.PlayerListener;
+import al.rosenth.SimplyUHC.scenarios.ScenarioManager;
 import al.rosenth.SimplyUHC.utils.ScoreboardTimer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -11,9 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -21,8 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.command.CommandSender;
 import org.bukkit.GameMode;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -51,9 +48,9 @@ public class SimplyUHC extends JavaPlugin implements Listener{
     }
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new PlayerListener(),this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        //getServer().getPluginManager().registerEvents(new CutClean(),this);
         getLogger().info("SimplyUHC started");
-        // TODO: Place any custom enable code here including the registration of any events
 
         // Register our events
         PluginManager pm = getServer().getPluginManager();
@@ -71,9 +68,9 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             if(isSet) {
                 if (args[0].equals("start")) {
                     if(!isRunning) {
+                        new ScenarioManager(getDataFolder().getPath()+"\\config.properties");
                         isRunning = true;
                         Random random = new Random();
-                        Player playerSender = (Player) sender;
                         for (Player p : getServer().getOnlinePlayers()) {
                             teleportPlayer(p);
                         }
@@ -109,7 +106,7 @@ public class SimplyUHC extends JavaPlugin implements Listener{
                     for(Player p: Bukkit.getServer().getOnlinePlayers()){
                         p.setGameMode(GameMode.SPECTATOR);
                         p.sendMessage("The game has been terminated early, there is no winner.");
-                        p.setMetadata("dead",new FixedMetadataValue(this,true));
+                        p.setMetadata("dead", new FixedMetadataValue(this, true));
                         Bukkit.getScheduler().cancelTask(id);
                         isRunning = false;
                         return true;
@@ -127,22 +124,13 @@ public class SimplyUHC extends JavaPlugin implements Listener{
                 sender.sendMessage(ChatColor.RED+"Please provide all arguments");
                 return true;
             }
-            for(Player p:  Bukkit.getServer().getOnlinePlayers()){
-                p.sendMessage("Please prepare for a bit of lag, as we are pregenerating the chunks");
-            }
+
             borderX = Integer.parseInt(args[0]);
             borderZ = Integer.parseInt(args[1]);
             isSet = true;
             World current =Bukkit.getWorlds().iterator().next();
             int xChunks =(int)Math.ceil(borderX/16);
             int zChunks = (int)Math.ceil(borderZ/16);
-
-            for(int xx = 0;xx<xChunks;xx++){
-                for(int zz = 0;zz<zChunks;zz++){
-                    current.loadChunk(xx,zz);
-                    getLogger().info("Chunk "+xx+", "+zz+" loaded.");
-                }
-            }
             sender.sendMessage("Border set");
             return true;
         }
