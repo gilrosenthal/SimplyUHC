@@ -10,7 +10,11 @@ import java.util.Properties;
  */
 public class ScenarioManager {
     Class[] createdScenarios= new Class[]{
-            CutClean.class,HalfOres.class,BenchBlitz.class
+            CutClean.class,
+            HalfOres.class,
+            BenchBlitz.class,
+            ThreeArrows.class,
+            AppleFamine.class
     };
     public ScenarioManager(String path){
         List<Scenario> loaded = new ArrayList<Scenario>();
