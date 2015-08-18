@@ -1,5 +1,6 @@
-package al.rosenth.SimplyUHC.scenarios;
+package al.rosenth.SimplyUHC.scenarios.Unique;
 
+import al.rosenth.SimplyUHC.scenarios.Scenario;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 /**
  * Created by Gil on 8/16/2015.
  */
-public class BenchBlitz implements Scenario  {
+public class BenchBlitz implements Scenario {
     HashMap<Player,Boolean> playerCrafted = new HashMap();
     public void load(){
         Bukkit.getPluginManager().registerEvents(this,Bukkit.getPluginManager().getPlugin("SimplyUHC"));

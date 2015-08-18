@@ -1,8 +1,10 @@
-package al.rosenth.SimplyUHC.scenarios;
+package al.rosenth.SimplyUHC.scenarios.Unique;
 
+import al.rosenth.SimplyUHC.scenarios.Scenario;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 
@@ -14,7 +16,7 @@ public class AppleFamine implements Scenario {
         Bukkit.getPluginManager().registerEvents(this,Bukkit.getPluginManager().getPlugin("SimplyUHC"));
     }
     public void unload(){}
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent e){
         if(e.getBlock().getType()== Material.LEAVES){
             e.setCancelled(true);

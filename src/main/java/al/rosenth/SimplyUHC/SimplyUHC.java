@@ -4,15 +4,14 @@ import al.rosenth.SimplyUHC.listeners.PlayerListener;
 import al.rosenth.SimplyUHC.scenarios.ScenarioManager;
 import al.rosenth.SimplyUHC.utils.ScoreboardTimer;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -20,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.GameMode;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.ArrayList;
@@ -68,25 +66,35 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             if(isSet) {
                 if (args[0].equals("start")) {
                     if(!isRunning) {
-                        new ScenarioManager(getDataFolder().getPath()+"\\config.properties");
+
                         isRunning = true;
                         Random random = new Random();
                         for (Player p : getServer().getOnlinePlayers()) {
                             teleportPlayer(p);
                         }
+                        World world = Bukkit.getWorld("world");
+                        WorldBorder border = world.getWorldBorder();
+                        border.setCenter(0,0);
+                        border.setSize((double)borderX*2);
                         playerCount(getServer().getOnlinePlayers().size());
                         displayHearts();
                         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "gamerule naturalRegeneration false");
                         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                             p.setGameMode(GameMode.SURVIVAL);
+                            p.getInventory().clear();
+                            p.getInventory().setHelmet(new ItemStack(Material.AIR));
+                            p.getInventory().setChestplate(new ItemStack(Material.AIR));
+                            p.getInventory().setLeggings(new ItemStack(Material.AIR));
+                            p.getInventory().setBoots(new ItemStack(Material.AIR));
                             p.sendMessage("All players are now teleported. We will now heal you and feed you one last time");
                             p.setHealth(20);
                             p.setFoodLevel(20);
                             p.sendMessage("You should now be healed and fed. Good Luck!");
                             freezePlayer(p, 1000);
                             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, -127));
-
                         }
+                        new ScenarioManager(getDataFolder().getPath()+"\\config.properties");
+
                         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                             p.sendMessage("Starting in 5 Seconds");
                             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -124,7 +132,6 @@ public class SimplyUHC extends JavaPlugin implements Listener{
                 sender.sendMessage(ChatColor.RED+"Please provide all arguments");
                 return true;
             }
-
             borderX = Integer.parseInt(args[0]);
             borderZ = Integer.parseInt(args[1]);
             isSet = true;

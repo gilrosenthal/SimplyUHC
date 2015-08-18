@@ -1,11 +1,13 @@
-package al.rosenth.SimplyUHC.scenarios;
+package al.rosenth.SimplyUHC.scenarios.Unique;
 
 
+import al.rosenth.SimplyUHC.scenarios.Scenario;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,17 +24,19 @@ public class CutClean implements Scenario {
     public void unload(){
 
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockBreak(BlockBreakEvent e){
         Block b = e.getBlock();
         if(e.getBlock().getType()== Material.IRON_ORE){
             e.setCancelled(true);
             b.setType(Material.AIR);
+            e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
             e.getBlock().getWorld().dropItemNaturally(b.getLocation(), new ItemStack(Material.IRON_INGOT));
         }
         else if(e.getBlock().getType()==Material.GOLD_ORE){
             e.setCancelled(true);
             b.setType(Material.AIR);
+            e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
             e.getBlock().getWorld().dropItemNaturally(b.getLocation(), new ItemStack(Material.GOLD_INGOT));
         }
     }

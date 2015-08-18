@@ -1,11 +1,11 @@
-package al.rosenth.SimplyUHC.scenarios;
+package al.rosenth.SimplyUHC.scenarios.Unique;
 
+import al.rosenth.SimplyUHC.scenarios.Scenario;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 /**
  * Created by Gil on 8/16/2015.

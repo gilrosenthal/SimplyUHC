@@ -1,5 +1,6 @@
-package al.rosenth.SimplyUHC.scenarios;
+package al.rosenth.SimplyUHC.scenarios.Unique;
 
+import al.rosenth.SimplyUHC.scenarios.Scenario;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -46,6 +47,7 @@ public class HalfOres implements Scenario {
                 else if(iron_count.get(e.getPlayer())==0){
                     e.setCancelled(true);
                     e.getBlock().setType(Material.AIR);
+                    e.getPlayer().getItemInHand().setDurability((short)(e.getPlayer().getItemInHand().getDurability()-1));
                     iron_count.put(e.getPlayer(),1);
                 }
             }
@@ -61,6 +63,7 @@ public class HalfOres implements Scenario {
                 else if(gold_count.get(e.getPlayer())==0){
                     e.setCancelled(true);
                     e.getBlock().setType(Material.AIR);
+                    e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
                     gold_count.put(e.getPlayer(),1);
                 }
             }
@@ -76,6 +79,7 @@ public class HalfOres implements Scenario {
                 else if(coal_count.get(e.getPlayer())==0){
                     e.setCancelled(true);
                     e.getBlock().setType(Material.AIR);
+                    e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
                     coal_count.put(e.getPlayer(),1);
                 }
             }
@@ -91,6 +95,7 @@ public class HalfOres implements Scenario {
                 else if(diamond_count.get(e.getPlayer())==0){
                     e.setCancelled(true);
                     e.getBlock().setType(Material.AIR);
+                    e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
                     diamond_count.put(e.getPlayer(),1);
                 }
             }
@@ -106,6 +111,7 @@ public class HalfOres implements Scenario {
                 else if(lapis_count.get(e.getPlayer())==0){
                     e.setCancelled(true);
                     e.getBlock().setType(Material.AIR);
+                    e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
                     lapis_count.put(e.getPlayer(),1);
                 }
             }
@@ -121,6 +127,7 @@ public class HalfOres implements Scenario {
                 else if(redstone_count.get(e.getPlayer())==0){
                     e.setCancelled(true);
                     e.getBlock().setType(Material.AIR);
+                    e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - 1));
                     redstone_count.put(e.getPlayer(),1);
                 }
             }
