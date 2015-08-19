@@ -15,7 +15,10 @@ public class ScenarioManager {
             BenchBlitz.class,
             ThreeArrows.class,
             AppleFamine.class,
-            Backpacks.class
+            Backpacks.class,
+            KutKlean.class,
+            BloodDiamonds.class,
+            HalfOres.class
     };
     public ScenarioManager(String path){
         List<Scenario> loaded = new ArrayList<Scenario>();
