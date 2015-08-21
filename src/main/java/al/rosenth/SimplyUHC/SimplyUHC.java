@@ -1,6 +1,7 @@
 package al.rosenth.SimplyUHC;
 
 import al.rosenth.SimplyUHC.listeners.PlayerListener;
+import al.rosenth.SimplyUHC.scenarios.Scenario;
 import al.rosenth.SimplyUHC.scenarios.ScenarioManager;
 import al.rosenth.SimplyUHC.utils.ScoreboardTimer;
 import net.md_5.bungee.api.ChatColor;
@@ -66,7 +67,6 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             if(isSet) {
                 if (args[0].equals("start")) {
                     if(!isRunning) {
-
                         isRunning = true;
                         Random random = new Random();
                         for (Player p : getServer().getOnlinePlayers()) {
@@ -127,6 +127,16 @@ public class SimplyUHC extends JavaPlugin implements Listener{
             }
 
         }
+        else if(cmd.getName().equalsIgnoreCase("scenarios")){
+            String toSend = ChatColor.GREEN+"Scenarios: ";
+            for(Scenario s: ScenarioManager.loaded){
+                toSend+=s.getClass().getSimpleName()+", ";
+            }
+            for(Player p: getServer().getOnlinePlayers()){
+                p.sendMessage(toSend);
+            }
+            return true;
+        }
         else if(cmd.getName().equalsIgnoreCase("setborder")){
             if(args.length != 2){
                 sender.sendMessage(ChatColor.RED+"Please provide all arguments");
@@ -155,13 +165,12 @@ public class SimplyUHC extends JavaPlugin implements Listener{
         for(Player p : getServer().getOnlinePlayers()){
             timer.sendPlayerScoreboard(p);
         }
-      id = this.getServer().getScheduler()
+        id = this.getServer().getScheduler()
                 .scheduleSyncRepeatingTask(this, new Runnable() {
                     public void run() {
                         timer.updateTime(timercount);
                         timercount++;
                     }
-
                 }, 0L, 20L);
     }
     private boolean safeSpawn(Player player){

@@ -8,3 +8,6 @@ commands:
   setborder:
       description: Sets the World border
       usage: /setborder maxX,maxY
+  scenarios:
+      description: Lists the scenarios loaded
+      usage: /scenarios

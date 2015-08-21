@@ -27,6 +27,7 @@ public class Backpacks implements Scenario {
     public void load(){
         Bukkit.getPluginManager().registerEvents(this,Bukkit.getPluginManager().getPlugin("SimplyUHC"));
         for(Player p:Bukkit.getOnlinePlayers()){
+
             ItemStack customBackPack=new ItemStack(Material.CHEST,1);
             ItemMeta im = customBackPack.getItemMeta();
             im.setDisplayName(ChatColor.BLUE + "" + "Backpack");

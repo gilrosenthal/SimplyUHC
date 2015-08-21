@@ -12,8 +12,10 @@ import java.util.Properties;
  * Created by Gil on 8/16/2015.
  */
 public class ScenarioManager {
+    public static List <Scenario> loaded = new ArrayList < Scenario > ();
     boolean cutClean = false;
     boolean halfOres = false;
+    boolean first = true;
     Class[] createdScenarios = new Class[] {
             CutClean.class,
             HalfOres.class,
@@ -21,10 +23,13 @@ public class ScenarioManager {
             ThreeArrows.class,
             AppleFamine.class,
             Backpacks.class,
-            HalfOresCutClean.class
+            HalfOresCutClean.class,
+            Diamondless.class,
+            BloodDiamonds.class,
+            Enchantless.class,
+            KutKlean.class
     };
     public ScenarioManager(String path) {
-        List < Scenario > loaded = new ArrayList < Scenario > ();
         Properties scenarioproperties = new Properties();
         try {
             FileInputStream in = new FileInputStream(path);
@@ -42,9 +47,10 @@ public class ScenarioManager {
                 if (s.equalsIgnoreCase("halfores")) {
                     halfOres = true;
                 }
-                if (cutClean && halfOres) {
+                if (cutClean && halfOres&&first) {
+                    first = false;
                     try {
-                        loaded.add((Scenario) clazz.getConstructor().newInstance(null));
+                        loaded.add((Scenario) new HalfOresCutClean());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
